@@ -46,7 +46,7 @@ class ShopCubit extends Cubit<ShopsStates> {
   final _auth = FirebaseAuth.instance;
 
   getSearch() async {
-    final items = await _firestore.collection('products').get().then((value) {
+    await _firestore.collection('products').get().then((value) {
       for (var item in value.docs) {
         searchList.add(item.data()['name']);
       }
@@ -108,10 +108,9 @@ class ShopCubit extends Cubit<ShopsStates> {
   pickImage(context) async {
     final myFile;
     if (source == true) {
-      myFile = await ImagePicker.platform.pickImage(source: ImageSource.camera);
+      myFile = await ImagePicker().pickImage(source: ImageSource.camera);
     } else {
-      myFile =
-          await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+      myFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     }
     file = File(myFile.path);
     imageName = myFile.path.split('/').last;
@@ -694,6 +693,7 @@ class ShopCubit extends Cubit<ShopsStates> {
     if (text.trim().isEmpty) {
       return "This field mustn't be empty";
     }
+    return null;
   }
 
   String? myvalPhone(text) {
@@ -704,11 +704,13 @@ class ShopCubit extends Cubit<ShopsStates> {
     } else if (text.startsWith(RegExp('05')) == false) {
       return "should starts with 05";
     }
+    return null;
   }
 
   String? myvalConfirmPassword(text) {
     if (text.trim().isEmpty) {
       return "This field mustn't be empty";
     }
+    return null;
   }
 }

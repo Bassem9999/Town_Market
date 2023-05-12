@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../view/adminDashboard/adminDashboard.dart';
 import '../view/customerView/favourites.dart';
 import '../view/customerView/home.dart';
-import '../view/customerView/login.dart';
 import '../animation/animatedRoute.dart';
 import '../view/customerView/myCart.dart';
 import '../view/customerView/products.dart';
@@ -142,6 +141,7 @@ String? myvalEmail(text) {
   if (text.trim().isEmpty) {
     return "This field mustn't be empty";
   }
+  return "";
 }
 
 String? myvalPassword(text) {
@@ -150,6 +150,7 @@ String? myvalPassword(text) {
   } else if (text.trim().length < 8) {
     return "Password should be 8 characters or more";
   }
+  return "";
 }
 
 String? myvalConfirmPassword(text) {
@@ -158,6 +159,7 @@ String? myvalConfirmPassword(text) {
   } else if (text != createpassword.text) {
     return "Passwords is not the same ";
   }
+  return "";
 }
 
 //  displayPaymentSheet(context)async{

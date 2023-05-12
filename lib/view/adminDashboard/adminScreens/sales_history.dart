@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../model/order_model.dart';
 import '../../../model/sales_history_model.dart';
 import '../../../view_model/appCubit.dart';
 import '../../../view_model/appStates.dart';

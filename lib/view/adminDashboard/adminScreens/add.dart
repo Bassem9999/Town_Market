@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../components/components.dart';
 import '../../../view_model/appCubit.dart';
 import '../../../view_model/appStates.dart';

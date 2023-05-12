@@ -9,6 +9,7 @@ import '../../view_model/appStates.dart';
 import 'myCart.dart';
 import 'productdetails.dart';
 
+// ignore: must_be_immutable
 class Products extends StatelessWidget {
   bool? filter;
   String? category;

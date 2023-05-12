@@ -17,7 +17,6 @@ class AdminDashboard extends StatelessWidget {
     return BlocConsumer<ShopCubit, ShopsStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          var cubit = ShopCubit.get(context);
           return Scaffold(
             //   appBar: AppBar(title: const Text("Admin Dashboard"),centerTitle: true,),
             body: Column(

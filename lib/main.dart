@@ -1,4 +1,3 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,9 +5,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'view/presentation/welcom_screen.dart';
 import 'view_model/appCubit.dart';
-import 'view_model/appStates.dart';
 import 'view/customerView/home.dart';
-import 'view/customerView/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +27,7 @@ void main() async {
       );
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
   bool? loginStatus;
   MyApp({this.loginStatus});

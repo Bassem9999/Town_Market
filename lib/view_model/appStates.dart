@@ -1,5 +1,3 @@
-import 'dart:io';
-
 abstract class ShopsStates {}
 
 class NewsIntialState extends ShopsStates {}

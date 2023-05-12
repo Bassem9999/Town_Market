@@ -1,11 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../components/components.dart';
 import '../../view_model/appCubit.dart';
 import '../../view_model/appStates.dart';
 
-import 'home.dart';
 import 'login.dart';
 
 class SignUpPage extends StatelessWidget {

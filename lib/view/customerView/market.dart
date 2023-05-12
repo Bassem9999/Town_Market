@@ -5,17 +5,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../view_model/appCubit.dart';
 import '../../view_model/appStates.dart';
 
+// ignore: must_be_immutable
 class MarketPage extends StatelessWidget {
   String marketname;
   String address;
   String collection;
   double longitude;
   double latitude;
-   MarketPage({required this.marketname,required this.address,required this.collection, required this.longitude,required this.latitude });
+   MarketPage({Key? key, required this.marketname,required this.address,required this.collection, required this.longitude,required this.latitude }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var cubit = ShopCubit.get(context);
     return BlocConsumer<ShopCubit,ShopsStates>(
       listener: (context, state) {},
       builder: (context, state) {
