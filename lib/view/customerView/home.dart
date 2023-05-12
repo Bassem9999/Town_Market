@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
 import '../../components/components.dart';
 import '../../model/product_model.dart';
-import '../../view_model/appCubit.dart';
-import '../../view_model/appStates.dart';
+import '../../view_model/app_cubit/appCubit.dart';
+import '../../view_model/app_cubit/appStates.dart';
 import 'productdetails.dart';
 import 'search.dart';
 

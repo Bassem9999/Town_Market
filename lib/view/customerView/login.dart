@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:khosomat/view_model/auth_cubit/auth_cubit.dart';
 import '../../components/components.dart';
-import '../../view_model/appCubit.dart';
-import '../../view_model/appStates.dart';
 import 'signup.dart';
 
 class LoginPage extends StatelessWidget {
@@ -10,10 +9,10 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ShopCubit, ShopsStates>(
+    return BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {},
         builder: (context, state) {
-          var cubit = ShopCubit.get(context);
+          var cubit = AuthCubit.get(context);
           return Scaffold(
             body: SafeArea(
               child: Container(
@@ -43,18 +42,8 @@ class LoginPage extends StatelessWidget {
                             const SizedBox(
                               height: 30,
                             ),
-                            myTextField(
-                                'Email',
-                                Icons.email_outlined,
-                                const Icon(null),
-                                () {},
-                                loginemail,
-                                false,
-                                myvalEmail),
-                            myTextField(
-                                'Password',
-                                Icons.lock_outline,
-                                cubit.isvisible
+                            myTextField( 'Email',Icons.email_outlined,const Icon(null),() {},loginemail,false, myvalEmail),
+                            myTextField('Password',Icons.lock_outline,cubit.isvisible
                                     ? const Icon(Icons.visibility_off)
                                     : const Icon(Icons.visibility),
                                 cubit.visibility,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../model/sales_history_model.dart';
-import '../../../view_model/appCubit.dart';
-import '../../../view_model/appStates.dart';
+import '../../../view_model/app_cubit/appCubit.dart';
+import '../../../view_model/app_cubit/appStates.dart';
 
 class SalesHistory extends StatelessWidget {
   const SalesHistory({Key? key}) : super(key: key);

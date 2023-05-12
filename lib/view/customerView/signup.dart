@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../components/components.dart';
-import '../../view_model/appCubit.dart';
-import '../../view_model/appStates.dart';
 
+import '../../view_model/auth_cubit/auth_cubit.dart';
 import 'login.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -11,10 +10,10 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ShopCubit, ShopsStates>(
+    return BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {},
         builder: (context, state) {
-          var cubit = ShopCubit.get(context);
+          var cubit = AuthCubit.get(context);
           return Scaffold(
             body: SafeArea(
               child: Container(

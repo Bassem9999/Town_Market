@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../components/components.dart';
-import '../../view_model/appCubit.dart';
+import '../../view_model/app_cubit/appCubit.dart';
 import 'market.dart';
 
 class MallsAndMarkets extends StatefulWidget {

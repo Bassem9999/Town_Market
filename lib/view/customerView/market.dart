@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../view_model/appCubit.dart';
-import '../../view_model/appStates.dart';
+
+import '../../view_model/app_cubit/appCubit.dart';
+import '../../view_model/app_cubit/appStates.dart';
+
 
 // ignore: must_be_immutable
 class MarketPage extends StatelessWidget {

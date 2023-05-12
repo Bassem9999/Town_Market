@@ -7,7 +7,7 @@ import '../view/customerView/home.dart';
 import '../animation/animatedRoute.dart';
 import '../view/customerView/myCart.dart';
 import '../view/customerView/products.dart';
-import '../../view_model/appCubit.dart';
+import '../../../view_model/app_cubit/appCubit.dart';
 import '../view/presentation/welcom_screen.dart';
 
 TextEditingController loginemail = TextEditingController();
@@ -141,7 +141,7 @@ String? myvalEmail(text) {
   if (text.trim().isEmpty) {
     return "This field mustn't be empty";
   }
-  return "";
+  return null;
 }
 
 String? myvalPassword(text) {
@@ -150,7 +150,7 @@ String? myvalPassword(text) {
   } else if (text.trim().length < 8) {
     return "Password should be 8 characters or more";
   }
-  return "";
+  return null;
 }
 
 String? myvalConfirmPassword(text) {
@@ -159,7 +159,7 @@ String? myvalConfirmPassword(text) {
   } else if (text != createpassword.text) {
     return "Passwords is not the same ";
   }
-  return "";
+   return null;
 }
 
 //  displayPaymentSheet(context)async{

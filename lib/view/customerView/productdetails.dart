@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../view_model/appCubit.dart';
-import '../../view_model/appStates.dart';
+import 'package:khosomat/view_model/app_cubit/appCubit.dart';
+
+import '../../view_model/app_cubit/appStates.dart';
+
 
 class ProductDetails extends StatelessWidget {
   final productName;

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../components/components.dart';
-import '../../view_model/appCubit.dart';
-import '../../view_model/appStates.dart';
+import '../../view_model/app_cubit/appCubit.dart';
+import '../../view_model/app_cubit/appStates.dart';
 import 'myCart.dart';
 
 class ConfirmOrdersPage extends StatelessWidget {
@@ -69,7 +69,7 @@ class ConfirmOrdersPage extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
                             controller: address,
-                            validator: cubit.myvalEmail,
+                            validator: myvalEmail,
                             maxLines: 3,
                             style: TextStyle(color: Colors.white),
                             decoration: InputDecoration(

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:khosomat/view_model/auth_cubit/auth_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'view/presentation/welcom_screen.dart';
-import 'view_model/appCubit.dart';
 import 'view/customerView/home.dart';
+import 'view_model/app_cubit/appCubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,8 +37,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ShopCubit()..getSearch(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => AuthCubit(),),
+        BlocProvider(create: (context) => ShopCubit()..getSearch(),),
+      ],
       child: MaterialApp(
         title: 'Town Market',
         color: Colors.teal,

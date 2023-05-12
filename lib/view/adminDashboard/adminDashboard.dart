@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../components/components.dart';
-import '../../view_model/appCubit.dart';
-import '../../view_model/appStates.dart';
+import '../../view_model/app_cubit/appCubit.dart';
+import '../../view_model/app_cubit/appStates.dart';
 import 'adminScreens/add.dart';
 import 'adminScreens/adminOrders.dart';
 import 'adminScreens/remove.dart';

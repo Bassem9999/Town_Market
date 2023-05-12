@@ -1,17 +1,16 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
-import '../components/components.dart';
-import '../view/customerView/home.dart';
+
+import '../../components/components.dart';
+import '../../view/customerView/home.dart';
 import 'appStates.dart';
 
 class ShopCubit extends Cubit<ShopsStates> {
@@ -19,14 +18,9 @@ class ShopCubit extends Cubit<ShopsStates> {
 
   static ShopCubit get(context) => BlocProvider.of(context);
 
-  bool loginTap = false;
-  bool signupTap = false;
+  
   bool confirmtap = false;
-  bool addProductTap = false;
-  bool updateProductTap = false;
-  bool deleteProductTap = false;
-  bool orderDeliveredTap = false;
-  bool isvisible = true;
+  
   int size = 3;
   List<Map> orders = [];
   List ordersNames = [];
@@ -43,7 +37,6 @@ class ShopCubit extends Cubit<ShopsStates> {
   String SECRET_KEY =
       'sk_test_51MBhHVL3KQvWUvzkzMt5PZnQ5Z8fRfJQSBKZDAUTg8MbUvxSw8xjUr59liDrOQ7AXytUwLpgQxufygHpu8tWASgq0081IgYGyM';
   final _firestore = FirebaseFirestore.instance;
-  final _auth = FirebaseAuth.instance;
 
   getSearch() async {
     await _firestore.collection('products').get().then((value) {
@@ -125,63 +118,7 @@ class ShopCubit extends Cubit<ShopsStates> {
     emit(ChooseSizeState());
   }
 
-  visibility() {
-    isvisible = !isvisible;
-    emit(PasswordVisibilityState());
-  }
-
-  login(context) async {
-    var currentData = formstatelogin.currentState;
-    currentData!.save();
-    if (currentData.validate()) {
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      loginTap = true;
-      emit(LoginLoadingState());
-      await _auth
-          .signInWithEmailAndPassword(
-              email: loginemail.text.trim(),
-              password: loginpassword.text.trim())
-          .then((value) {
-        myPushNavigator(context, HomePage());
-        loginTap = false;
-        preferences.setBool('loginStatus', true);
-        print(preferences.getBool('loginStatus'));
-        emit(LoginNotLoadingState());
-        print("success");
-      }).catchError((onError) {
-        loginTap = false;
-        emit(LoginNotLoadingState());
-        print(onError.toString());
-        showdialog(context, "Some thing went Wrong", null, Colors.black);
-      });
-    }
-  }
-
-  signUp(context) async {
-    var currentData = formstatesignup.currentState;
-    currentData!.save();
-    if (currentData.validate()) {
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      signupTap = true;
-      emit(SignUpLoadingState());
-      await _auth
-          .createUserWithEmailAndPassword(
-              email: createemail.text.trim(),
-              password: createpassword.text.trim())
-          .then((value) {
-        myPushNavigator(context, HomePage());
-        signupTap = false;
-        preferences.setBool('loginStatus', true);
-        emit(SignUpNotLoadingState());
-        print("success");
-      }).catchError((onError) {
-        signupTap = false;
-        emit(SignUpNotLoadingState());
-        print(onError.toString());
-        showdialog(context, "Email not valid", null, Colors.white);
-      });
-    }
-  }
+  
 
   droplist() {
     return Padding(
@@ -215,148 +152,7 @@ class ShopCubit extends Cubit<ShopsStates> {
     );
   }
 
-  void addProduct(context) async {
-    var formData = formstateAddProduct.currentState;
-    formData!.save();
-    if (formData.validate()) {
-      addProductTap = true;
-      emit(AddProductState());
-      int _old = int.parse(oldPriceController.text);
-      int _new = int.parse(newPriceController.text);
-      double discount = 100 - _new / _old * 100;
-      String image64 = '';
-      if (file != null) {
-        Uint8List imagepytes = await file!.readAsBytes();
-        image64 = base64Encode(imagepytes);
-      }
-      await _firestore
-          .collection('products')
-          .doc(productNameController.text)
-          .set({
-        'name': productNameController.text,
-        'newPrice': newPriceController.text,
-        'oldPrice': oldPriceController.text,
-        'discount': discount.ceil().toString(),
-        'imageUrl': image64,
-        'category': category,
-        'time': DateTime.now()
-      }).then((value) {
-        productNameController.text = '';
-        newPriceController.text = '';
-        oldPriceController.text = '';
-        file = null;
-        addProductTap = false;
-        snackbar(context, "Item was added successfully");
-        emit(AddProductState());
-        print("success");
-      });
-    }
-  }
-
-  void updateProduct(context, name, image, category) async {
-    var formData = formstateUpdateProduct.currentState;
-    formData!.save();
-    if (formData.validate()) {
-      updateProductTap = true;
-      emit(UpdateProductState());
-      int _old = int.parse(oldPriceController.text);
-      int _new = int.parse(newPriceController.text);
-      double discount = 100 - _new / _old * 100;
-      String image64 = '';
-      if (file != null) {
-        Uint8List imagepytes = await file!.readAsBytes();
-        image64 = base64Encode(imagepytes);
-      } else {
-        image64 = image;
-      }
-      await _firestore.collection('products').doc(name).set({
-        'name': name,
-        'newPrice': newPriceController.text,
-        'oldPrice': oldPriceController.text,
-        'discount': discount.ceil().toString(),
-        'imageUrl': image64,
-        'category': category,
-        'time': DateTime.now()
-      }).then((value) {
-        productNameController.text = '';
-        newPriceController.text = '';
-        oldPriceController.text = '';
-        file = null;
-        updateProductTap = false;
-        snackbar(context, "Item was Updated successfully");
-        emit(UpdateProductState());
-        print("success");
-      });
-    }
-  }
-
-  deleteProduct(context, String document) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Column(
-              children: [
-                const Text(
-                  "Are you sure you want to Remove this Item?",
-                  style: TextStyle(color: Colors.white),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                        child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text("No"),
-                      style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(100, 30),
-                          backgroundColor: Colors.orange),
-                    )),
-                    const Spacer(),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          deleteProductTap = true;
-                          emit(DeleteProductState());
-                          await _firestore
-                              .collection('products')
-                              .doc(document)
-                              .delete()
-                              .then((value) {
-                            print("success");
-                          });
-                          deleteProductTap = false;
-                          Navigator.pop(context);
-                          snackbar(context, "Item was Deleted successfully");
-                          emit(DeleteProductState());
-                        },
-                        child: deleteProductTap
-                            ? Container(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 8),
-                                child: const Center(
-                                    child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 4,
-                                )))
-                            : const Text("Yes"),
-                        style: ElevatedButton.styleFrom(
-                            fixedSize: const Size(100, 30),
-                            backgroundColor: Colors.orange),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            backgroundColor: const Color.fromARGB(255, 32, 32, 32),
-          );
-        });
-  }
+  
 
   decodeImage(String decodedImage) {
     Uint8List image_64 = base64Decode(decodedImage);
@@ -606,111 +402,6 @@ class ShopCubit extends Cubit<ShopsStates> {
     }
   }
 
-  orderDelivered(context, Map<String, dynamic> data, docId) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Column(
-              children: [
-                const Text(
-                  "Are you sure you want to Remove this order ?",
-                  style: TextStyle(color: Colors.white),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                        child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text("No"),
-                      style: ElevatedButton.styleFrom(
-                          fixedSize: const Size(100, 30),
-                          backgroundColor: Colors.teal),
-                    )),
-                    const Spacer(),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          orderDeliveredTap = true;
-                          emit(OrderDeliveredState());
-                          await postData('sales', data, data['id']);
-                          await _firestore
-                              .collection('orders')
-                              .doc(docId)
-                              .delete()
-                              .then((value) {
-                            print("success");
-                          }).then((value) {
-                            orderDeliveredTap = false;
-                            Navigator.pop(context);
-                            snackbar(context, "Order Delivered");
-                            emit(OrderDeliveredState());
-                          });
-                        },
-                        child: orderDeliveredTap
-                            ? Container(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 8),
-                                child: const Center(
-                                    child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 4,
-                                )))
-                            : const Text("Yes"),
-                        style: ElevatedButton.styleFrom(
-                            fixedSize: const Size(100, 30),
-                            backgroundColor: Colors.teal),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            backgroundColor: const Color.fromARGB(255, 32, 32, 32),
-          );
-        });
-    // orderDeliveredTap = true;
-    // emit(OrderDeliveredState());
-    // // addData('sales', data).then((value) {
-    // _firestore.collection('orders').doc(docId).delete().then((value) {
-    //   orderDeliveredTap = false;
-    //   showdialog(context, "Order Delivered", null, Colors.green);
-    //   emit(OrderDeliveredState());
-    //   //   });
-    // }).catchError((e) {
-    //   orderDeliveredTap = false;
-    //   showdialog(context, "Some Thing Wrong Happened", null, Colors.red);
-    //   emit(OrderDeliveredState());
-    // });
-  }
+  
 
-  String? myvalEmail(text) {
-    if (text.trim().isEmpty) {
-      return "This field mustn't be empty";
-    }
-    return null;
-  }
-
-  String? myvalPhone(text) {
-    if (text.trim().isEmpty) {
-      return "This field mustn't be empty";
-    } else if (text.trim().length < 10) {
-      return "Password should be 10 Numbers";
-    } else if (text.startsWith(RegExp('05')) == false) {
-      return "should starts with 05";
-    }
-    return null;
-  }
-
-  String? myvalConfirmPassword(text) {
-    if (text.trim().isEmpty) {
-      return "This field mustn't be empty";
-    }
-    return null;
-  }
 }
