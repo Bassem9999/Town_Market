@@ -1,6 +1,6 @@
-import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
 import '../../components/components.dart';
 import '../../model/product_model.dart';
 import '../../view_model/appCubit.dart';
