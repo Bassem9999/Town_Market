@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:khosomat/view_model/admin_cubit/admin_cubit.dart';
 import '../../../components/components.dart';
-import '../../../view_model/app_cubit/appCubit.dart';
-import '../../../view_model/app_cubit/appStates.dart';
 import '../../customerView/productdetails.dart';
 
 class DeleteProduct extends StatelessWidget {
@@ -10,10 +9,10 @@ class DeleteProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ShopCubit, ShopsStates>(
+    return BlocConsumer<AdminCubit, AdminState>(
         listener: (context, state) {},
         builder: (context, state) {
-          var cubit = ShopCubit.get(context);
+          var cubit = AdminCubit.get(context);
           return Scaffold(
             appBar: AppBar(
               title: Text(

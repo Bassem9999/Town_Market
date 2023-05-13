@@ -92,6 +92,63 @@ class AdminCubit extends Cubit<AdminState> {
     Navigator.pop(context);
   }
 
+  decodeImage(String decodedImage) {
+    Uint8List image_64 = base64Decode(decodedImage);
+    Image image = Image.memory(
+      image_64,
+      fit: BoxFit.cover,
+    );
+    return image;
+  }
+
+
+   getdata(String collection) async {
+    var data = await _firestore.collection(collection).get();
+    // var data = await _firestore.collection(collection).orderBy('time',descending: true).get();
+    return data.docs;
+  }
+
+  getOrderdData(collection) async {
+    var data = await _firestore
+        .collection(collection)
+        .orderBy('time', descending: true)
+        .get();
+    return data.docs;
+  }
+
+   droplist() {
+    return Padding(
+      padding:
+          const EdgeInsets.only(right: 200.0, top: 10, bottom: 20, left: 10),
+      child: DropdownButton(
+        borderRadius: BorderRadius.circular(30),
+        value: category,
+        hint: const Text(
+          'Category',
+          style: TextStyle(color: Colors.white),
+        ),
+        dropdownColor: const Color.fromARGB(255, 109, 109, 109),
+        items: categories.map((item) {
+          return DropdownMenuItem(
+              value: item,
+              child: Container(
+                  height: 40,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  alignment: Alignment.centerLeft,
+                  child: Text(item,
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ))));
+        }).toList(),
+        onChanged: (String? prov) {
+          category = prov;
+          emit(DroplistState());
+        },
+      ),
+    );
+  }
+
+
 
   void addProduct(context) async {
     var formData = formstateAddProduct.currentState;

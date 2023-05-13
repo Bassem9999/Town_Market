@@ -7,6 +7,8 @@ class AdminInitialState extends AdminState {}
 
 class GetImageState extends AdminState {}
 
+class DroplistState extends AdminState {}
+
 class AddProductState extends AdminState {}
 
 class UpdateProductState extends AdminState {}

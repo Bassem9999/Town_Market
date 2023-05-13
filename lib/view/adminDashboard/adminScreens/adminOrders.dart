@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:khosomat/view_model/admin_cubit/admin_cubit.dart';
 import '../../../model/order_model.dart';
-import '../../../view_model/app_cubit/appCubit.dart';
-import '../../../view_model/app_cubit/appStates.dart';
 
 class AdminOrders extends StatefulWidget {
   const AdminOrders({Key? key}) : super(key: key);
@@ -14,10 +13,10 @@ class AdminOrders extends StatefulWidget {
 class _AdminOrdersState extends State<AdminOrders> {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ShopCubit, ShopsStates>(
+    return BlocConsumer<AdminCubit, AdminState>(
         listener: (context, state) {},
         builder: (context, state) {
-          var cubit = ShopCubit.get(context);
+          var cubit = AdminCubit.get(context);
           return Scaffold(
             appBar: AppBar(
               title: const Text("Orders"),
