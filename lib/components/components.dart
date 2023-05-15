@@ -384,7 +384,8 @@ myDrawer(context) {
             ),
             leading: Icon(Icons.favorite_border, color: Colors.white),
             onTap: () {
-              myPushNavigator(context, WelcomScreen());
+             // myPushNavigator(context, WelcomScreen());
+             cubit.showToken();
             }),
       ),
       Padding(

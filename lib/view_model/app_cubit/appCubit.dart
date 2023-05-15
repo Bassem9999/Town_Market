@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:khosomat/view/customerView/products.dart';
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -34,9 +36,9 @@ class ShopCubit extends Cubit<ShopsStates> {
   String? imageName;
   List searchList = [];
   Map<String, dynamic>? paymentIntend;
-  String SECRET_KEY =
-      'sk_test_51MBhHVL3KQvWUvzkzMt5PZnQ5Z8fRfJQSBKZDAUTg8MbUvxSw8xjUr59liDrOQ7AXytUwLpgQxufygHpu8tWASgq0081IgYGyM';
+  String SECRET_KEY = 'sk_test_51MBhHVL3KQvWUvzkzMt5PZnQ5Z8fRfJQSBKZDAUTg8MbUvxSw8xjUr59liDrOQ7AXytUwLpgQxufygHpu8tWASgq0081IgYGyM';
   final _firestore = FirebaseFirestore.instance;
+  final fbm = FirebaseMessaging.instance;
 
   getSearch() async {
     await _firestore.collection('products').get().then((value) {
@@ -47,6 +49,53 @@ class ShopCubit extends Cubit<ShopsStates> {
     });
   }
 
+  showToken(){
+    fbm.getToken().then((value){
+      print("===================   $value   ===================");
+    });
+  //  print(token.);
+  }
+
+  showNotifications(context){
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      print(" ============ ${event.notification!.title} ===========");
+      myPushNavigator(context, Products());
+     });
+   
+  }
+
+  showInialNotifications(context)async{
+    var message = await fbm.getInitialMessage();
+     if(message != null){
+      myPushNavigator(context, Products());
+     }
+   
+  }
+
+   getNotifications(){
+    FirebaseMessaging.onMessage.listen((event) { 
+      print("======================");
+      print(event.notification?.body);
+      print("======================");
+    });
+  }
+
+  sendNotification(String title, String body,String id)async{
+    var serverKey = "AAAA0YnwaBQ:APA91bEnjVwwyweyT5CyxITYOVi0e1dPy0IlrZfybUZYhd42h0hiAIOT6PBB7Wxlrm-D6QrT0S55IarJVzJ2STwk3j88YN2iDs-2Y4ZePTmV2tSQTuIUQfM_ij7v7vvctPPLkt_KNyxe";
+    var data = jsonEncode({
+      'notification' : {'body' : body, 'title' : title},
+      'priority' : 'high',
+      'data' : {'click_action' : 'FLUTTER_NOTIFICATION_CLICK', 'id' : id, 'name' : 'bassem'},
+      'to' : await fbm.getToken()
+      });
+    var url = 'https://fcm.googleapis.com/fcm/send';
+
+    await http.post(Uri.parse(url), body: data, headers: {'Content-Type' : 'application/json', 'Authorization' : 'key-$serverKey'}).then((value) {
+      print(value.body.toString());
+    });
+  }
+
+
   showImagesource(context) {
     return showDialog(
         context: context,
@@ -54,14 +103,8 @@ class ShopCubit extends Cubit<ShopsStates> {
           return AlertDialog(
             title: Column(
               children: [
-                const Text(
-                  "Choose image source",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const Text("Choose image source",style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+                const SizedBox(height: 10,),
                 Row(
                   children: [
                     Expanded(
@@ -120,38 +163,7 @@ class ShopCubit extends Cubit<ShopsStates> {
 
   
 
-  droplist() {
-    return Padding(
-      padding:
-          const EdgeInsets.only(right: 200.0, top: 10, bottom: 20, left: 10),
-      child: DropdownButton(
-        borderRadius: BorderRadius.circular(30),
-        value: category,
-        hint: const Text(
-          'Category',
-          style: TextStyle(color: Colors.white),
-        ),
-        dropdownColor: const Color.fromARGB(255, 109, 109, 109),
-        items: categories.map((item) {
-          return DropdownMenuItem(
-              value: item,
-              child: Container(
-                  height: 40,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  alignment: Alignment.centerLeft,
-                  child: Text(item,
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ))));
-        }).toList(),
-        onChanged: (String? prov) {
-          category = prov;
-          emit(DroplistState());
-        },
-      ),
-    );
-  }
-
+ 
   
 
   decodeImage(String decodedImage) {
@@ -233,13 +245,7 @@ class ShopCubit extends Cubit<ShopsStates> {
     return data.docs;
   }
 
-  getOrderdData(collection) async {
-    var data = await _firestore
-        .collection(collection)
-        .orderBy('time', descending: true)
-        .get();
-    return data.docs;
-  }
+  
 
   Future postData(
       String collection, Map<String, dynamic> mydata, String p_name) async {

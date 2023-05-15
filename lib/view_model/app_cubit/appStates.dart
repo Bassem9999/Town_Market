@@ -18,8 +18,6 @@ class RemovefromFavouritesState extends ShopsStates {}
 
 class ChooseSizeState extends ShopsStates {}
 
-class DroplistState extends ShopsStates {}
-
 class ConfirmOrderState extends ShopsStates {}
 
 
