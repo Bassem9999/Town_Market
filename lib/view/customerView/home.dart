@@ -12,10 +12,8 @@ class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ShopCubit, ShopsStates>(
-      builder: (context, state) {
-        var cubit = ShopCubit.get(context);
-        return Scaffold(
+    var cubit = ShopCubit.get(context);
+    return Scaffold(
           appBar: AppBar(
             title: const Text('Town Market'),
             centerTitle: true,
@@ -31,11 +29,12 @@ class HomePage extends StatelessWidget {
             ],
           ),
           drawer: myDrawer(context),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              cubit.sendNotification("test", "Hello", "1");
-            },
-          ),
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: () {
+          //     cubit.sendNotification("test", "Hello", "1");
+          //  // print("kjfjjjp");
+          //   },
+          // ),
           body: ListView(
             children: [
               SizedBox(
@@ -45,67 +44,40 @@ class HomePage extends StatelessWidget {
                   dotSize: 7,
                   dotIncreasedColor: Colors.black,
                   images: [
-                    Image.asset(
-                      "images/clothes shop background9.jpg",
-                      fit: BoxFit.cover,
-                    ),
-                    Image.asset(
-                      "images/clothes shop background2.jpg",
-                      fit: BoxFit.cover,
-                    ),
-                    Image.asset(
-                      "images/clothes shop background3.jpg",
-                      fit: BoxFit.cover,
-                    ),
-                    Image.asset(
-                      "images/clothes shop background7.jpg",
-                      fit: BoxFit.cover,
-                    ),
-                    Image.asset(
-                      "images/clothes shop background5.jpg",
-                      fit: BoxFit.cover,
-                    ),
+                    Image.asset("images/clothes shop background9.jpg",fit: BoxFit.cover,),
+                    Image.asset("images/clothes shop background2.jpg",fit: BoxFit.cover,),
+                    Image.asset("images/clothes shop background3.jpg",fit: BoxFit.cover,),
+                    Image.asset("images/clothes shop background7.jpg",fit: BoxFit.cover,),
+                    Image.asset("images/clothes shop background5.jpg",fit: BoxFit.cover,),
                   ],
                 ),
               ),
               Container(
                   padding: const EdgeInsets.only(top: 20, left: 8),
                   alignment: Alignment.centerLeft,
-                  child: const Text(
-                    "Categories",
-                    style: TextStyle(fontSize: 22, color: Colors.white),
-                  )),
+                  child: const Text("Categories",style: TextStyle(fontSize: 22, color: Colors.white),)),
+
               SizedBox(
                 height: 180,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    myCategoryWidget(
-                        context, "Suits", 'images/suit.jpg', 'suits'),
-                    myCategoryWidget(
-                        context, "Dresses", 'images/dress.jpg', 'dresses'),
-                    myCategoryWidget(
-                        context, "Jackets", 'images/jacket.jpg', 'jackets'),
-                    myCategoryWidget(
-                        context, "Shirts", 'images/shirts.jpg', 'shirts'),
-                    myCategoryWidget(
-                        context, "Jeans", 'images/jeans.jpg', 'jeans'),
-                    myCategoryWidget(
-                        context, "T-Shirts", 'images/t-shirt.jpg', 'tshirts'),
-                    myCategoryWidget(
-                        context, "Blouzes", 'images/blouze.jpg', 'blouzes'),
-                    myCategoryWidget(context, "Accessories",
-                        'images/accessories2.jpg', 'accessories'),
+                    myCategoryWidget(context, "Suits", 'images/suit.jpg', 'suits'),
+                    myCategoryWidget(context, "Dresses", 'images/dress.jpg', 'dresses'),
+                    myCategoryWidget(context, "Jackets", 'images/jacket.jpg', 'jackets'),
+                    myCategoryWidget(context, "Shirts", 'images/shirts.jpg', 'shirts'),
+                    myCategoryWidget(context, "Jeans", 'images/jeans.jpg', 'jeans'),
+                    myCategoryWidget(context, "T-Shirts", 'images/t-shirt.jpg', 'tshirts'),
+                    myCategoryWidget(context, "Blouzes", 'images/blouze.jpg', 'blouzes'),
+                    myCategoryWidget(context, "Accessories",'images/accessories2.jpg', 'accessories'),
                   ],
                 ),
               ),
               Container(
                   padding: const EdgeInsets.all(8),
                   alignment: Alignment.centerLeft,
-                  child: const Text(
-                    "Products ",
-                    style: TextStyle(fontSize: 22, color: Colors.white),
-                  )),
+                  child: const Text("Products ",style: TextStyle(fontSize: 22, color: Colors.white))),
+
               SizedBox(
                 height: 500,
                 child: FutureBuilder(
@@ -136,149 +108,135 @@ class HomePage extends StatelessWidget {
                                           margin: const EdgeInsets.only(top: 5),
                                           decoration: BoxDecoration(
                                               color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                              image: DecorationImage(
-                                                  image: cubit
-                                                      .decodeImage(
-                                                          "${productModel.productImage}")
-                                                      .image,
-                                                  fit: BoxFit.contain)),
+                                              borderRadius:BorderRadius.circular(30),
+                                              image: DecorationImage(image: cubit.decodeImage( "${productModel.productImage}").image,fit: BoxFit.contain)),
                                         ),
-                                        "${productModel.discount}" != '0'
-                                            ? Container(
-                                                height: 48,
-                                                width: 48,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.teal,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            40)),
-                                                child: Center(
-                                                    child: Column(
-                                                  children: [
-                                                    const SizedBox(
-                                                      height: 12,
-                                                    ),
-                                                    const Text("Discount",
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 11)),
-                                                    Text(
-                                                        "${productModel.discount}" +
-                                                            '%',
-                                                        style: const TextStyle(
-                                                          color: Colors.white,
-                                                        )),
-                                                  ],
-                                                )),
-                                              )
-                                            : const Text("")
-                                      ],
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        SizedBox(
-                                          height: 30,
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 2,
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 5.0),
-                                                  child: Text(
-                                                    productModel.productName
-                                                        .toString(),
-                                                    maxLines: 2,
-                                                    style: const TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 14,
-                                                        overflow: TextOverflow
-                                                            .ellipsis),
-                                                  ),
+
+                                        "${productModel.discount}" != '0'?
+                                         Container(
+                                            height: 48,
+                                            width: 48,
+                                            decoration: BoxDecoration(
+                                                color: Colors.teal,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        40)),
+                                            child: Center(
+                                                child: Column(
+                                              children: [
+                                                const SizedBox(
+                                                  height: 12,
                                                 ),
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                    "${productModel.productNewPrice}" +
-                                                        " \$",
+                                                const Text("Discount",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 11)),
+                                                Text(
+                                                    "${productModel.discount}" +
+                                                        '%',
                                                     style: const TextStyle(
-                                                        fontSize: 14,
-                                                        color:
-                                                            Colors.tealAccent)),
-                                              ),
-                                              "${productModel.discount}" != '0'
-                                                  ? Expanded(
-                                                      child: Text(
-                                                        "${productModel.productOldPrice}",
-                                                        style: const TextStyle(
-                                                            fontSize: 15,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .lineThrough,
-                                                            color: Colors.grey),
-                                                      ),
-                                                    )
-                                                  : const Text(""),
-                                            ],
-                                          ),
-                                        ),
-                                        BlocConsumer<ShopCubit, ShopsStates>(
-                                            listener: (context, state) {},
-                                            builder: (context, state) {
-                                              return Container(
-                                                  height: 30,
-                                                  width: 100,
-                                                  decoration: BoxDecoration(
-                                                      color: cubit.ordersNames
-                                                              .contains(
-                                                                  "${productModel.productName}")
-                                                          ? Colors.grey
-                                                          : Colors.orange,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10)),
-                                                  child: TextButton(
-                                                      onPressed: () {
-                                                        cubit.ordersNames.contains(
-                                                                "${productModel.productName}")
-                                                            ? null
-                                                            : cubit.addtoCart(
-                                                                "${productModel.productName}",
-                                                                "${productModel.productNewPrice}",
-                                                                "${productModel.productOldPrice}",
-                                                                "${productModel.discount}",
-                                                                "${productModel.productImage}");
-                                                      },
-                                                      child: const Text(
-                                                        "Add to Cart",
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white),
-                                                      )));
-                                            })
-                                      ],
-                                    ),
-                                  ]),
+                                                      color: Colors.white,
+                                                    )),
+                                              ],
+                                            )),
+                                          )
+                                        : const Text("")
+                                  ],
                                 ),
-                                onTap: () {
-                                  myPushNavigator(
-                                      context,
-                                      ProductDetails(
-                                        productName:
-                                            "${productModel.productName}",
-                                        productNewPrice:
-                                            "${productModel.productNewPrice}",
-                                        productOldPrice:
-                                            "${productModel.productOldPrice}",
-                                        discount: "${productModel.discount}",
-                                        productImage:
-                                            "${productModel.productImage}",
-                                      ));
+                                Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.end,
+                                  children: [
+                                    SizedBox(
+                                      height: 30,
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 2,
+                                            child: Padding(
+                                              padding: const EdgeInsets
+                                                      .symmetric(
+                                                  horizontal: 5.0),
+                                              child: Text(
+                                                productModel.productName
+                                                    .toString(),
+                                                maxLines: 2,
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 14,
+                                                    overflow: TextOverflow
+                                                        .ellipsis),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                                "${productModel.productNewPrice}" +
+                                                    " \$",
+                                                style: const TextStyle(
+                                                    fontSize: 14,
+                                                    color:
+                                                        Colors.tealAccent)),
+                                          ),
+                                          "${productModel.discount}" != '0'
+                                              ? Expanded(
+                                                  child: Text(
+                                                    "${productModel.productOldPrice}",
+                                                    style: const TextStyle(
+                                                        fontSize: 15,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .lineThrough,
+                                                        color: Colors.grey),
+                                                  ),
+                                                )
+                                              : const Text(""),
+                                        ],
+                                      ),
+                                    ),
+              BlocBuilder<ShopCubit, ShopsStates>(
+                  builder: (context, state) {
+                    return Container(
+                        height: 30,
+                        width: 100,
+                        decoration: BoxDecoration(
+                            color: cubit.ordersNames.contains("${productModel.productName}")
+                                ? Colors.grey
+                                : Colors.orange,
+                            borderRadius:
+                                BorderRadius.circular(
+                                    10)),
+                        child: TextButton(
+                            onPressed: () {
+                              cubit.ordersNames.contains("${productModel.productName}")
+                                  ? null
+                                  : cubit.addtoCart(
+                                      "${productModel.productName}",
+                                      "${productModel.productNewPrice}",
+                                      "${productModel.productOldPrice}",
+                                      "${productModel.discount}",
+                                      "${productModel.productImage}");
+                            },
+                            child: const Text("Add to Cart",style: TextStyle(color: Colors.white))));
+                                        })
+                                  ],
+                                ),
+                              ]),
+                            ),
+                            onTap: () {
+                              myPushNavigator(
+                                  context,
+                                  ProductDetails(
+                                    productName:
+                                        "${productModel.productName}",
+                                    productNewPrice:
+                                        "${productModel.productNewPrice}",
+                                    productOldPrice:
+                                        "${productModel.productOldPrice}",
+                                    discount: "${productModel.discount}",
+                                    productImage:
+                                        "${productModel.productImage}",
+                                  ));
                                 },
                               );
                             });
@@ -292,7 +250,5 @@ class HomePage extends StatelessWidget {
             ],
           ),
         );
-      },
-    );
   }
 }

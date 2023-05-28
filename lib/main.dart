@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthCubit(),),
-        BlocProvider(create: (context) => ShopCubit()..getNotifications()..showInialNotifications(context)..getSearch(),),
+        BlocProvider(create: (context) => ShopCubit()..notifyPermission()..subscripeTopic()..getNotifications()..getSearch(),),
         BlocProvider(create: (context) => AdminCubit()),
       ],
       child: MaterialApp(

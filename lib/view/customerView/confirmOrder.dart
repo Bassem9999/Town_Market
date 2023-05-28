@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:khosomat/view/customerView/payment.dart';
 import '../../components/components.dart';
-import '../../view_model/app_cubit/appCubit.dart';
-import '../../view_model/app_cubit/appStates.dart';
 import 'myCart.dart';
 
 class ConfirmOrdersPage extends StatelessWidget {
@@ -11,11 +8,7 @@ class ConfirmOrdersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ShopCubit, ShopsStates>(
-        listener: (context, state) {},
-        builder: (context, state) {
-          var cubit = ShopCubit.get(context);
-          return Scaffold(
+    return Scaffold(
             body: Form(
               key: formstateconfirmOrder,
               child: ListView(
@@ -48,7 +41,7 @@ class ConfirmOrdersPage extends StatelessWidget {
                     height: 10,
                   ),
                   Container(
-                    height: 530,
+                    height: 560,
                     margin: const EdgeInsets.all(5),
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     decoration: BoxDecoration(
@@ -56,15 +49,11 @@ class ConfirmOrdersPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20)),
                     child: Column(
                       children: [
-                        myTextField("Real Name", Icons.person, const Icon(null),
-                            () {}, name, false, myvalEmail),
-                        const Spacer(),
-                        myTextField("Mobile Number", Icons.phone_android,
-                            const Icon(null), () {}, mobile, false, myvalEmail),
-                        const Spacer(),
-                        myTextField("Email", Icons.email_outlined,
-                            const Icon(null), () {}, email, false, myvalEmail),
-                        const Spacer(),
+                        myTextField("Real Name", Icons.person, const Icon(null),() {}, name, false, myvalEmail),
+                        SizedBox(height: 10,),
+                        myTextField("Mobile Number", Icons.phone_android,const Icon(null), () {}, mobile, false, myvalEmail),
+                        SizedBox(height: 10,),
+                        myTextField("Email", Icons.email_outlined,const Icon(null), () {}, email, false, myvalEmail),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextFormField(
@@ -87,66 +76,26 @@ class ConfirmOrdersPage extends StatelessWidget {
                           ),
                         ),
                         //  myTextField("Address", Icons.house_outlined, const Icon(null), (){}, address, false, myvalEmail),
-                        const Spacer(),
+                      //  const Spacer(),
                         const SizedBox(
                           height: 20,
                         ),
 
-                        cubit.confirmtap
-                            ? const CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 4.5,
-                              )
-                            : Row(
-                                children: [
-                                  Expanded(
-                                    child: TextButton(
-                                      onPressed: () {
-                                        cubit.makeUnpaidOrder(context);
-                                      },
-                                      child: Container(
-                                        child: const Center(
-                                            child: Text(
-                                          "Pay Later",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 17),
-                                        )),
-                                        height: 50,
-                                        width: 140,
-                                        decoration: BoxDecoration(
-                                            color: Colors.teal,
-                                            borderRadius:
-                                                BorderRadius.circular(30)),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: TextButton(
-                                      onPressed: () {
-                                        cubit.makePaidOrder(
-                                            cubit.price.ceil().toString(),
-                                            context);
-                                      },
-                                      child: Container(
-                                        height: 50,
-                                        width: 140,
-                                        child: const Center(
-                                            child: Text(
-                                          "Pay Now",
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white),
-                                        )),
-                                        decoration: BoxDecoration(
-                                            color: Colors.orange,
-                                            borderRadius:
-                                                BorderRadius.circular(30)),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                         InkWell(
+                           child: Container(
+                             height: 60,
+                             width: 250,
+                             decoration: BoxDecoration(color: Colors.teal, borderRadius:BorderRadius.circular(30)),
+                             child: const Center( child: Text("Go to Payment",style: TextStyle(color: Colors.white,fontSize: 20))),
+                           ),
+                           onTap: () {
+                            var formData = formstateconfirmOrder.currentState;
+                            formData!.save();
+                            if (formData.validate()) {
+                            myPushNavigator(context, const PaymentPage());
+                            }
+                           },
+                         ),
                       ],
                     ),
                   ),
@@ -154,6 +103,5 @@ class ConfirmOrdersPage extends StatelessWidget {
               ),
             ),
           );
-        });
   }
 }

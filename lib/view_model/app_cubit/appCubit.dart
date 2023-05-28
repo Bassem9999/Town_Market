@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:khosomat/view/customerView/products.dart';
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_paypal_checkout/flutter_paypal_checkout.dart';
 
 import '../../components/components.dart';
 import '../../view/customerView/home.dart';
@@ -49,6 +50,20 @@ class ShopCubit extends Cubit<ShopsStates> {
     });
   }
 
+  notifyPermission()async{
+  await fbm.requestPermission(
+  alert: true,
+  announcement: false,
+  badge: true,
+  carPlay: false,
+  criticalAlert: false,
+  provisional: false,
+  sound: true,
+);
+  }
+
+  
+
   showToken(){
     fbm.getToken().then((value){
       print("===================   $value   ===================");
@@ -61,22 +76,29 @@ class ShopCubit extends Cubit<ShopsStates> {
       print(" ============ ${event.notification!.title} ===========");
       myPushNavigator(context, Products());
      });
-   
   }
 
-  showInialNotifications(context)async{
-    var message = await fbm.getInitialMessage();
-     if(message != null){
-      myPushNavigator(context, Products());
-     }
-   
+  subscripeTopic()async{
+  await fbm.subscribeToTopic('bassem').then((value) {
+    print("done");
+  });
   }
+
+
+  // showInialNotifications(context)async{
+  //   var message = await fbm.getInitialMessage();
+  //    if(message != null){
+  //     myPushNavigator(context, Products());
+  //    }
+   
+  // }
 
    getNotifications(){
-    FirebaseMessaging.onMessage.listen((event) { 
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) { 
       print("======================");
-      print(event.notification?.body);
+      print(message.notification!.body);
       print("======================");
+    //   print(message.data['name']);
     });
   }
 
@@ -85,13 +107,13 @@ class ShopCubit extends Cubit<ShopsStates> {
     var data = jsonEncode({
       'notification' : {'body' : body, 'title' : title},
       'priority' : 'high',
-      'data' : {'click_action' : 'FLUTTER_NOTIFICATION_CLICK', 'id' : id, 'name' : 'bassem'},
-      'to' : await fbm.getToken()
+      'data' : {'click_action' : 'FLUTTER_NOTIFICATION_CLICK', 'id' : id, 'name' : 'bassem','to': "${fbm.getToken()}"},
+      'to' : "/topics/bassem"
       });
     var url = 'https://fcm.googleapis.com/fcm/send';
 
     await http.post(Uri.parse(url), body: data, headers: {'Content-Type' : 'application/json', 'Authorization' : 'key-$serverKey'}).then((value) {
-      print(value.body.toString());
+    //  print(value.toString());
     });
   }
 
@@ -168,10 +190,7 @@ class ShopCubit extends Cubit<ShopsStates> {
 
   decodeImage(String decodedImage) {
     Uint8List image_64 = base64Decode(decodedImage);
-    Image image = Image.memory(
-      image_64,
-      fit: BoxFit.cover,
-    );
+    Image image = Image.memory(image_64,fit: BoxFit.cover,);
     return image;
   }
 
@@ -269,7 +288,7 @@ class ShopCubit extends Cubit<ShopsStates> {
     return calAmount.toString();
   }
 
-  createPayment(String amount, String currency) async {
+  createPaymentIntent(String amount, String currency) async {
     try {
       Map data = {
         'amount': calculateAmount(amount),
@@ -294,34 +313,31 @@ class ShopCubit extends Cubit<ShopsStates> {
     }
   }
 
-  Future makePaidOrder(String amount, context) async {
-    var formData = formstateconfirmOrder.currentState;
-    formData!.save();
-    if (formData.validate()) {
+  Future makeStripePaidOrder(String amount, context) async {
       confirmtap = true;
       emit(ConfirmOrderState());
       try {
-        paymentIntend = await createPayment(amount, 'USD');
+        paymentIntend = await createPaymentIntent(amount, 'USD');
         await Stripe.instance.initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
                 paymentIntentClientSecret: paymentIntend!['client_secret'],
                 // applePay: PaymentSheetApplePay(merchantCountryCode: '+92'),
                 // googlePay: PaymentSheetGooglePay(testEnv: true,currencyCode: "US",merchantCountryCode: )
-                appearance: const PaymentSheetAppearance(
+                appearance:  PaymentSheetAppearance(
                   colors: PaymentSheetAppearanceColors(
-                      background: Color.fromARGB(255, 68, 68, 68),
+                      background: Color.fromARGB(255, 68, 68, 68).withOpacity(0.5),
                       // componentText: Colors.white,
                       // primary: Colors.white,
-                      componentBackground: Colors.black,
-                      componentBorder: Colors.teal,
+                      componentBackground: const Color.fromARGB(255, 45, 45, 45).withOpacity(0.7),
+                      componentBorder: Colors.grey,
                       primaryText: Colors.white,
-                      componentDivider: Colors.teal,
+                      componentDivider: Colors.grey,
                       componentText: Colors.white,
-                      placeholderText: Colors.grey,
+                      placeholderText: const Color.fromARGB(255, 200, 200, 200),
                       icon: Colors.white,
                       secondaryText: Colors.white),
                 ),
-                style: ThemeMode.light,
+                style: ThemeMode.dark,
                 merchantDisplayName: 'Bassem'));
         confirmtap = false;
         emit(ConfirmOrderState());
@@ -363,13 +379,132 @@ class ShopCubit extends Cubit<ShopsStates> {
         showdialog(context, "Error Has been Occured!!", null, Colors.black);
         emit(ConfirmOrderState());
       }
-    }
+    
+  }
+
+  makePayPalPaidOrder(context){
+    Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => PaypalCheckout(
+                sandboxMode: true,
+                clientId: "AdzFeCTHo1s73fqMa6Wasq2QzdyxUvVyyBqRzmJXkRT4bVpEo6EymzQPQP_xpu2psKsmMWGJfX-2dzjr",
+                secretKey: "EHqwZIQUlixDENUFEK28UdmZWH45PPDJgMVOZOMj9Z6ILiPuVV92OG3wGGAEbDdEgAzTKxm1lGlp_Yq5",
+                returnURL: "success.snippetcoder.com",
+                cancelURL: "cancel.snippetcoder.com",
+                transactions: [
+                  {
+                    "amount": {
+                      "total": '${price.ceil()}',
+                      "currency": "USD",
+                      "details": {
+                        "subtotal": '${price.ceil()}',
+                        "shipping": '0',
+                        "shipping_discount": 0
+                      }
+                    },
+                    "description": "The payment transaction description.",
+                    // "payment_options": {
+                    //   "allowed_payment_method":
+                    //       "INSTANT_FUNDING_SOURCE"
+                    // },
+                  //  "item_list": {
+                      // "items": 
+                      // [
+                      //   {
+                      //     "name": "Apple",
+                      //     "quantity": 1,
+                      //     "price": '50',
+                      //     "currency": "USD"
+                      //   },
+                      //   {
+                      //     "name": "Pineapple",
+                      //     "quantity": 1,
+                      //     "price": '50',
+                      //     "currency": "USD"
+                      //   }
+                      // ],
+
+                      // shipping address is not required though
+                      //   "shipping_address": {
+                      //     "recipient_name": "Raman Singh",
+                      //     "line1": "Delhi",
+                      //     "line2": "",
+                      //     "city": "Delhi",
+                      //     "country_code": "IN",
+                      //     "postal_code": "11001",
+                      //     "phone": "+00000000",
+                      //     "state": "Texas"
+                      //  },
+                //    }
+                  }
+                ],
+                note: "Contact us for any questions on your order.",
+                onSuccess: (Map params) async {
+                   if(params['message'] == "Success"){
+                    myPushNavigator(context, HomePage());
+                    showdialog(context, "Confirm",
+                         SizedBox(
+                          height: 200,
+                         child: Column(children: [
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            margin: EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              border: Border.all(color: Colors.green),
+                              borderRadius: BorderRadius.circular(50)
+                            ),
+                            child: Icon(Icons.done,size: 70,color: Colors.white,)),
+                          Text("Your Order was submitted successfully",style: TextStyle(color: Colors.green,fontSize: 20,fontWeight: FontWeight.bold),),
+                                             ],),
+                       ), Colors.white);
+                   // snackbar(context, "Your Order was submitted successfully");
+                     postData(
+                        'orders',
+                        {
+                          'id': email.text + ordersNames.toString(),
+                          'name': name.text,
+                          'address': address.text,
+                          'mobile': mobile.text,
+                          'email': email.text,
+                          'totalPrice': price.toString(),
+                          'order': ordersNames.toString(),
+                          'quantity': ordersQuantities.toString(),
+                          'paymentStatus': "Paid",
+                          'time': DateTime.now().toString()
+                        },
+                        email.text + ordersNames.toString(),).then((value) {
+                        name.text = "";
+                        address.text = "";
+                        mobile.text = "";
+                        email.text = "";
+                        orders.clear();
+                        ordersNames.clear();
+                        ordersQuantities.clear();
+                        price = 0;
+                        confirmtap = false;
+                       // myPushNavigator(context, HomePage());
+                        print("================== onSuccess: ${params['message']} ======================");
+                        //snackbar(context, "Your Order was submitted successfully");
+                      //  showdialog(context, "Confirm", Text("Your Order was submitted successfully",style: TextStyle(color: Colors.white),), Colors.green);
+                        emit(ConfirmOrderState());
+                      });
+                   
+                  }
+                  
+                  // print("onSuccess: ${params['data']['transactions'][0]['item_list']['items']}");
+                },
+                onError: (error) {
+                  print("onError: $error");
+                  Navigator.pop(context);
+                },
+                onCancel: () {
+                  print('cancelled:');
+                },
+              ),
+            ));
   }
 
   makeUnpaidOrder(context) {
-    var formData = formstateconfirmOrder.currentState;
-    formData!.save();
-    if (formData.validate()) {
       confirmtap = true;
       emit(ConfirmOrderState());
       postData(
@@ -405,7 +540,7 @@ class ShopCubit extends Cubit<ShopsStates> {
         showdialog(context, "Some thing went Wrong", null, Colors.black);
         emit(ConfirmOrderState());
       });
-    }
+    
   }
 
   

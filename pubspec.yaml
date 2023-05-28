@@ -45,6 +45,7 @@ dependencies:
   device_preview: ^1.1.0
   carousel_pro_nullsafety: ^2.0.0
   firebase_messaging: ^14.6.0
+  flutter_paypal_checkout: ^1.0.1
 
 
 dev_dependencies:
