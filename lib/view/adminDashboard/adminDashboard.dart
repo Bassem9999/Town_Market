@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../components/components.dart';
+import '../../components/widgets/dashboard_item_widget.dart';
 import '../../view_model/app_cubit/appCubit.dart';
 import '../../view_model/app_cubit/appStates.dart';
 import 'adminScreens/add.dart';
@@ -10,7 +10,7 @@ import 'adminScreens/sales_history.dart';
 import 'adminScreens/update.dart';
 
 class AdminDashboard extends StatelessWidget {
-  AdminDashboard({Key? key}) : super(key: key);
+  const AdminDashboard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,193 +21,78 @@ class AdminDashboard extends StatelessWidget {
             //   appBar: AppBar(title: const Text("Admin Dashboard"),centerTitle: true,),
             body: Column(
               children: [
-                const SizedBox(
-                  height: 30,
+                 SizedBox(
+                  height: MediaQuery.of(context).size.height * .07,
+                ),
+
+                const Text("Admin Dashboard", style: TextStyle( fontSize: 25,color: Colors.white,fontWeight: FontWeight.bold)),
+                                       
+                 SizedBox(
+                  height: MediaQuery.of(context).size.height * .01,
                 ),
                 Container(
                     padding: const EdgeInsets.only(top: 20, left: 20),
                     alignment: Alignment.centerLeft,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "Hello Bassem",
-                          style: TextStyle(
-                              fontSize: 22,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "Welcom Back !",
-                          style: TextStyle(color: Colors.grey, fontSize: 15),
-                        )
-                      ],
-                    )),
-                const SizedBox(
-                  height: 20,
+                    child: const Text("Hello Bassem", style: TextStyle( fontSize: 22,color: Colors.white,fontWeight: FontWeight.normal))),
+                                       
+                Container(
+                  padding: const EdgeInsets.only(left: 20,top: 5),
+                  alignment: Alignment.centerLeft,
+                  child: const Text("Welcom Back !",style: TextStyle(color: Colors.grey, fontSize: 15))),
+                    
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * .01,
                 ),
-                Expanded(
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      myAdminDashboardWidget(
-                        context,
-                        Colors.tealAccent,
-                        const SalesHistory(),
-                        Column(
-                          children: const [
-                            Icon(
-                              Icons.archive_outlined,
-                              size: 100,
-                            ),
-                            Text(
-                              "Sales",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      myAdminDashboardWidget(
-                        context,
-                        const Color.fromARGB(255, 205, 179, 212),
-                        const AdminOrders(),
-                        Column(
-                          children: const [
-                            Icon(
-                              Icons.monetization_on_outlined,
-                              size: 100,
-                            ),
-                            Text(
-                              "Revenu",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Expanded(
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      myAdminDashboardWidget(
-                        context,
-                        const Color.fromARGB(255, 211, 218, 113),
-                        const AdminOrders(),
-                        Column(
-                          children: const [
-                            Icon(
-                              Icons.shopping_cart_checkout_sharp,
-                              size: 100,
-                            ),
-                            Text(
-                              "Orders",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      myAdminDashboardWidget(
-                        context,
-                        const Color.fromARGB(255, 137, 202, 131),
-                        const Insert(),
-                        Column(
-                          children: const [
-                            Icon(
-                              Icons.add_circle_outline_rounded,
-                              size: 100,
-                            ),
-                            Text(
-                              "Add Product",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Expanded(
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      myAdminDashboardWidget(
-                        context,
-                        const Color.fromARGB(255, 166, 197, 223),
-                        const UpdateProduct(),
-                        Column(
-                          children: const [
-                            Icon(
-                              Icons.update_rounded,
-                              size: 100,
-                            ),
-                            Text(
-                              "Update Product",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      myAdminDashboardWidget(
-                        context,
-                        const Color.fromARGB(255, 223, 166, 166),
-                        const DeleteProduct(),
-                        Column(
-                          children: const [
-                            Icon(
-                              Icons.delete_outline,
-                              size: 100,
-                            ),
-                            Text(
-                              "Remove Product",
-                              style: TextStyle(
-                                  fontSize: 19, fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                    ],
-                  ),
-                ),
+
+                 Expanded(
+                   child: Row(
+                     children: [
+                       DashboardItem( icon: Icons.archive_outlined,
+                                      text: "Salse",
+                                      color: Colors.tealAccent,
+                                      screen: const SalesHistory()),
+                 
+                       DashboardItem( icon: Icons.monetization_on_outlined,
+                                      text: "Revenu",
+                                      color: const Color.fromARGB(255, 205, 179, 212),
+                                      screen: const AdminOrders()),
+                     ],
+                   ),
+                 ),               
+                
+
+                 Expanded(
+                   child: Row(
+                     children: [
+                       DashboardItem( icon: Icons.shopping_cart_checkout_sharp,
+                                      text: "Orders",
+                                      color: const Color.fromARGB(255, 211, 218, 113),
+                                      screen: const AdminOrders()),
+                                 
+                       DashboardItem( icon: Icons.add_circle_outline_rounded,
+                                      text: "Add Product",
+                                      color: const Color.fromARGB(255, 137, 202, 131),
+                                      screen: const Insert()),
+                     ],
+                   ),
+                 ),
+
+
+                 Expanded(
+                   child: Row(
+                     children: [
+                       DashboardItem( icon: Icons.update_rounded,
+                                      text: "Update Product",
+                                      color: const Color.fromARGB(255, 166, 197, 223),
+                                      screen: const UpdateProduct()),
+                 
+                       DashboardItem( icon: Icons.delete_outline,
+                                      text: "Remove Product",
+                                      color: const Color.fromARGB(255, 223, 166, 166),
+                                      screen: const DeleteProduct()),
+                     ],
+                   ),
+                 ),               
               ],
             ),
           );

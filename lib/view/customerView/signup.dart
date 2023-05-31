@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../components/components.dart';
 
+import '../../components/utils/controllers.dart';
 import '../../view_model/auth_cubit/auth_cubit.dart';
 import 'login.dart';
 
@@ -30,7 +31,7 @@ class SignUpPage extends StatelessWidget {
                     ),
                     SizedBox(
                       child: Form(
-                        key: formstatesignup,
+                        key: Controllers.formstatesignup,
                         child: Column(
                           children: [
                             const Text(
@@ -48,7 +49,7 @@ class SignUpPage extends StatelessWidget {
                                 Icons.email_outlined,
                                 const Icon(null),
                                 null,
-                                createemail,
+                                Controllers.createemail,
                                 false,
                                 myvalEmail),
                             myTextField(
@@ -58,7 +59,7 @@ class SignUpPage extends StatelessWidget {
                                     ? const Icon(Icons.visibility_off)
                                     : const Icon(Icons.visibility),
                                 cubit.visibility,
-                                createpassword,
+                                Controllers.createpassword,
                                 cubit.isvisible,
                                 myvalPassword),
                             myTextField(
@@ -68,7 +69,7 @@ class SignUpPage extends StatelessWidget {
                                     ? const Icon(Icons.visibility_off)
                                     : const Icon(Icons.visibility),
                                 cubit.visibility,
-                                confirmpassword,
+                                Controllers.confirmpassword,
                                 cubit.isvisible,
                                 myvalConfirmPassword),
                             ElevatedButton(

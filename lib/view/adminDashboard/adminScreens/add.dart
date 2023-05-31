@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:khosomat/components/utils/controllers.dart';
 import 'package:khosomat/view_model/admin_cubit/admin_cubit.dart';
 import '../../../components/components.dart';
 
@@ -27,7 +28,7 @@ class Insert extends StatelessWidget {
               ),
             ),
             body: Form(
-              key: formstateAddProduct,
+              key: Controllers.formstateAddProduct,
               child: ListView(
                 children: [
                   SizedBox(height: 20),
@@ -87,9 +88,9 @@ class Insert extends StatelessWidget {
                       Expanded(flex: 1, child: SizedBox()),
                     ],
                   ),
-                  adminTextfield(productNameController, 'name'),
-                  adminTextfield(newPriceController, 'newPrice'),
-                  adminTextfield(oldPriceController, 'oldPrice'),
+                  adminTextfield(Controllers.productNameController, 'name'),
+                  adminTextfield(Controllers.newPriceController, 'newPrice'),
+                  adminTextfield(Controllers.oldPriceController, 'oldPrice'),
                   cubit.droplist(),
                   ElevatedButton(
                     onPressed: () {

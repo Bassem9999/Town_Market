@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khosomat/view_model/admin_cubit/admin_cubit.dart';
 import '../../../components/components.dart';
+import '../../../components/widgets/product_widget.dart';
 import '../../customerView/productdetails.dart';
 
 class DeleteProduct extends StatelessWidget {
@@ -29,14 +30,13 @@ class DeleteProduct extends StatelessWidget {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: InkWell(
-                            child: myProductWidget(
-                                context,
-                                i,
-                                snapshot.data,
+                            child: ProductWidget(
+                                source: snapshot.data,
+                                index : i,
+                                widget: 
                                 ElevatedButton(
                                   onPressed: () {
-                                    cubit.deleteProduct(
-                                        context, snapshot.data[i]['name']);
+                                    cubit.deleteProduct(context, snapshot.data[i]['name']);
                                   },
                                   child: Text("Remove Product"),
                                   style: ElevatedButton.styleFrom(

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/components.dart';
+import '../../components/utils/controllers.dart';
 import '../../view/customerView/home.dart';
 
 part 'auth_state.dart';
@@ -26,15 +27,16 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   login(context) async {
-    var currentData = formstatelogin.currentState;
+    var currentData = Controllers.formstatelogin.currentState;
     currentData!.save();
     if (currentData.validate()) {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       loginTap = true;
       emit(LoginLoadingState());
-      await _auth.signInWithEmailAndPassword( email: loginemail.text.trim(),password: loginpassword.text.trim()).then((value) {
+      await _auth.signInWithEmailAndPassword( email: Controllers.loginemail.text.trim(),password: Controllers.loginpassword.text.trim()).then((value) {
         myPushNavigator(context, HomePage());
         loginTap = false;
+        preferences.setString('email', Controllers.loginemail.text);
         preferences.setBool('loginStatus', true);
         print(preferences.getBool('loginStatus'));
         emit(LoginNotLoadingState());
@@ -49,28 +51,26 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   signUp(context) async {
-    var currentData = formstatesignup.currentState;
+    var currentData = Controllers.formstatesignup.currentState;
     currentData!.save();
     if (currentData.validate()) {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       signupTap = true;
       emit(SignUpLoadingState());
-      await _auth
-          .createUserWithEmailAndPassword(
-              email: createemail.text.trim(),
-              password: createpassword.text.trim())
-          .then((value) {
-        myPushNavigator(context, HomePage());
-        signupTap = false;
-        preferences.setBool('loginStatus', true);
-        emit(SignUpNotLoadingState());
-        print("success");
-      }).catchError((onError) {
-        signupTap = false;
-        emit(SignUpNotLoadingState());
-        print(onError.toString());
-        showdialog(context, "Email not valid", null, Colors.white);
-      });
+      await _auth.createUserWithEmailAndPassword(
+              email: Controllers.createemail.text.trim(),
+              password: Controllers.createpassword.text.trim()).then((value) {
+                myPushNavigator(context, HomePage());
+                signupTap = false;
+                preferences.setBool('loginStatus', true);
+                emit(SignUpNotLoadingState());
+                print("success");
+              }).catchError((onError) {
+                signupTap = false;
+                emit(SignUpNotLoadingState());
+                print(onError.toString());
+                showdialog(context, "Email not valid", null, Colors.white);
+              });
     }
   }
 }

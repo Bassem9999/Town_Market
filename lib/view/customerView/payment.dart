@@ -25,12 +25,12 @@ class PaymentPage extends StatelessWidget {
 
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                  child: Text("Choose the Payment Method",style: TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold),),
+                  child: Text("Choose the Payment Method",style: TextStyle(color: Colors.white,fontSize: 23,fontWeight: FontWeight.bold),),
                 ),
                 Expanded(
                   child: InkWell(
                     child: Container(
-                      width: 230,
+                      width: MediaQuery.of(context).size.width * .6,
                       margin: const EdgeInsets.all(10),
                       decoration: BoxDecoration(color: Color.fromARGB(255, 223, 144, 26), borderRadius:BorderRadius.circular(30)),
                       child: const Column(
@@ -51,9 +51,9 @@ class PaymentPage extends StatelessWidget {
                 Expanded(
                   child: InkWell(
                     child: Container(
-                      width: 230,
+                      width: MediaQuery.of(context).size.width * .6,
                       margin: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(color: Color.fromARGB(255, 57, 25, 165), borderRadius:BorderRadius.circular(30)),
+                      decoration: BoxDecoration(color: Color.fromARGB(255, 32, 25, 165), borderRadius:BorderRadius.circular(30)),
                       child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -72,7 +72,7 @@ class PaymentPage extends StatelessWidget {
                 Expanded(
                   child: InkWell(
                     child: Container(
-                      width: 230,
+                      width: MediaQuery.of(context).size.width * .6,
                       margin: const EdgeInsets.all(10),
                       decoration: BoxDecoration(color: Colors.teal, borderRadius:BorderRadius.circular(30)),
                       child: const Column(

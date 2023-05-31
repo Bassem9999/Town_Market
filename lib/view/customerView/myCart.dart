@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../components/components.dart';
+import '../../components/widgets/mydrawer_widget.dart';
 import '../../view_model/app_cubit/appCubit.dart';
 import '../../view_model/app_cubit/appStates.dart';
 import 'confirmOrder.dart';
@@ -17,7 +18,7 @@ class CartScreen extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) => Scaffold(
               // appBar: AppBar(title: Text("My Orders"),),
-              drawer: myDrawer(context),
+              drawer: const MyDrawer(),
 
               body: Column(
                 children: [

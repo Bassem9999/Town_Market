@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../components/components.dart';
+import '../../components/widgets/product_widget.dart';
 import '../../view_model/app_cubit/appCubit.dart';
 import '../../view_model/app_cubit/appStates.dart';
 
@@ -25,15 +26,20 @@ class _FavouritePageState extends State<FavouritePage> {
             body: ListView.builder(
                 itemCount: cubit.favourites.length,
                 itemBuilder: (context, i) {
-                  return myProductWidget(
-                      context,
-                      i,
-                      cubit.favourites,
-                      ElevatedButton(
-                          onPressed: () {
-                            cubit.removeFromFavourites(i);
-                          },
-                          child: Text("Remove")));
+                  return ProductWidget(
+                                source: i,
+                                index : i,
+                                widget: 
+                               ElevatedButton(
+                                  onPressed: () {
+                                    cubit.removeFromFavourites(i);
+                                  },
+                                  child: Text("Remove")));
+                  // return myProductWidget(
+                  //     context,
+                  //     i,
+                  //     cubit.favourites,
+                      
                 }),
           );
         });

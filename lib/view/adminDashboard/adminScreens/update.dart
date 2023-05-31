@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../components/components.dart';
+import '../../../components/widgets/product_widget.dart';
 import '../../../view_model/app_cubit/appCubit.dart';
 import '../../../view_model/app_cubit/appStates.dart';
 import 'updateScreen.dart';
@@ -33,8 +34,11 @@ class _UpdateProductState extends State<UpdateProduct> {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: InkWell(
-                            child: myProductWidget(
-                                context, i, snapshot.data, null),
+                            child: ProductWidget(
+                                source: snapshot.data,
+                                index : i,
+                                widget: null
+                            ),
                             onTap: () {
                               myPushNavigator(
                                   context,

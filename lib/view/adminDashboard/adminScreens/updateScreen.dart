@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../components/components.dart';
+import '../../../components/utils/controllers.dart';
 import '../../../view_model/admin_cubit/admin_cubit.dart';
 
 
@@ -28,7 +29,7 @@ class UpdateScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(),
             body: Form(
-              key: formstateUpdateProduct,
+              key: Controllers.formstateUpdateProduct,
               child: ListView(
                 children: [
                   Container(
@@ -68,7 +69,7 @@ class UpdateScreen extends StatelessWidget {
                       SizedBox(
                         width: 150,
                         child: TextFormField(
-                          controller: oldPriceController,
+                          controller: Controllers.oldPriceController,
                           validator: myvalEmail,
                           style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(
@@ -100,7 +101,7 @@ class UpdateScreen extends StatelessWidget {
                       SizedBox(
                         width: 150,
                         child: TextFormField(
-                          controller: newPriceController,
+                          controller: Controllers.newPriceController,
                           validator: myvalEmail,
                           style: TextStyle(color: Colors.white),
                           decoration: InputDecoration(

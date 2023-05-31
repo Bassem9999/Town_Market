@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../components/components.dart';
+import '../../components/utils/controllers.dart';
 
 part 'admin_state.dart';
 
@@ -151,13 +152,13 @@ class AdminCubit extends Cubit<AdminState> {
 
 
   void addProduct(context) async {
-    var formData = formstateAddProduct.currentState;
+    var formData = Controllers.formstateAddProduct.currentState;
     formData!.save();
     if (formData.validate()) {
       addProductTap = true;
       emit(AddProductState());
-      int _old = int.parse(oldPriceController.text);
-      int _new = int.parse(newPriceController.text);
+      int _old = int.parse(Controllers.oldPriceController.text);
+      int _new = int.parse(Controllers.newPriceController.text);
       double discount = 100 - _new / _old * 100;
       String image64 = '';
       if (file != null) {
@@ -166,19 +167,19 @@ class AdminCubit extends Cubit<AdminState> {
       }
       await _firestore
           .collection('products')
-          .doc(productNameController.text)
+          .doc(Controllers.productNameController.text)
           .set({
-        'name': productNameController.text,
-        'newPrice': newPriceController.text,
-        'oldPrice': oldPriceController.text,
+        'name': Controllers.productNameController.text,
+        'newPrice': Controllers.newPriceController.text,
+        'oldPrice': Controllers.oldPriceController.text,
         'discount': discount.ceil().toString(),
         'imageUrl': image64,
         'category': category,
         'time': DateTime.now()
       }).then((value) {
-        productNameController.text = '';
-        newPriceController.text = '';
-        oldPriceController.text = '';
+        Controllers.productNameController.text = '';
+        Controllers.newPriceController.text = '';
+        Controllers.oldPriceController.text = '';
         file = null;
         addProductTap = false;
         snackbar(context, "Item was added successfully");
@@ -189,13 +190,13 @@ class AdminCubit extends Cubit<AdminState> {
   }
 
   void updateProduct(context, name, image, category) async {
-    var formData = formstateUpdateProduct.currentState;
+    var formData = Controllers.formstateUpdateProduct.currentState;
     formData!.save();
     if (formData.validate()) {
       updateProductTap = true;
       emit(UpdateProductState());
-      int _old = int.parse(oldPriceController.text);
-      int _new = int.parse(newPriceController.text);
+      int _old = int.parse(Controllers.oldPriceController.text);
+      int _new = int.parse(Controllers.newPriceController.text);
       double discount = 100 - _new / _old * 100;
       String image64 = '';
       if (file != null) {
@@ -206,16 +207,16 @@ class AdminCubit extends Cubit<AdminState> {
       }
       await _firestore.collection('products').doc(name).set({
         'name': name,
-        'newPrice': newPriceController.text,
-        'oldPrice': oldPriceController.text,
+        'newPrice': Controllers.newPriceController.text,
+        'oldPrice': Controllers.oldPriceController.text,
         'discount': discount.ceil().toString(),
         'imageUrl': image64,
         'category': category,
         'time': DateTime.now()
       }).then((value) {
-        productNameController.text = '';
-        newPriceController.text = '';
-        oldPriceController.text = '';
+        Controllers.productNameController.text = '';
+        Controllers.newPriceController.text = '';
+        Controllers.oldPriceController.text = '';
         file = null;
         updateProductTap = false;
         snackbar(context, "Item was Updated successfully");

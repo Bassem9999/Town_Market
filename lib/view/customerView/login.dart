@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khosomat/view_model/auth_cubit/auth_cubit.dart';
 import '../../components/components.dart';
+import '../../components/utils/controllers.dart';
 import 'signup.dart';
 
 class LoginPage extends StatelessWidget {
@@ -29,7 +30,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     SizedBox(
                       child: Form(
-                        key: formstatelogin,
+                        key:Controllers. formstatelogin,
                         child: Column(
                           children: [
                             const Text(
@@ -42,12 +43,12 @@ class LoginPage extends StatelessWidget {
                             const SizedBox(
                               height: 30,
                             ),
-                            myTextField( 'Email',Icons.email_outlined,const Icon(null),() {},loginemail,false, myvalEmail),
+                            myTextField( 'Email',Icons.email_outlined,const Icon(null),() {},Controllers.loginemail,false, myvalEmail),
                             myTextField('Password',Icons.lock_outline,cubit.isvisible
                                     ? const Icon(Icons.visibility_off)
                                     : const Icon(Icons.visibility),
                                 cubit.visibility,
-                                loginpassword,
+                                Controllers.loginpassword,
                                 cubit.isvisible,
                                 myvalPassword),
                             ElevatedButton(

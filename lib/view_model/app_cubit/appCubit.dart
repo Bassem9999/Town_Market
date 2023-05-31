@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_paypal_checkout/flutter_paypal_checkout.dart';
 
 import '../../components/components.dart';
+import '../../components/utils/controllers.dart';
 import '../../view/customerView/home.dart';
 import 'appStates.dart';
 
@@ -345,23 +346,23 @@ class ShopCubit extends Cubit<ShopsStates> {
           postData(
             'orders',
             {
-              'id': email.text + ordersNames.toString(),
-              'name': name.text,
-              'address': address.text,
-              'mobile': mobile.text,
-              'email': email.text,
+              'id': Controllers.email.text + ordersNames.toString(),
+              'name': Controllers.name.text,
+              'address': Controllers.address.text,
+              'mobile': Controllers.mobile.text,
+              'email': Controllers.email.text,
               'totalPrice': price.toString(),
               'order': ordersNames.toString(),
               'quantity': ordersQuantities.toString(),
               'paymentStatus': "Paid",
               'time': DateTime.now().toString()
             },
-            email.text + ordersNames.toString(),
+            Controllers.email.text + ordersNames.toString(),
           ).then((value) {
-            name.text = "";
-            address.text = "";
-            mobile.text = "";
-            email.text = "";
+            Controllers.name.text = "";
+            Controllers.address.text = "";
+            Controllers.mobile.text = "";
+            Controllers.email.text = "";
             orders.clear();
             ordersNames.clear();
             ordersQuantities.clear();
@@ -440,43 +441,45 @@ class ShopCubit extends Cubit<ShopsStates> {
                 note: "Contact us for any questions on your order.",
                 onSuccess: (Map params) async {
                    if(params['message'] == "Success"){
-                    myPushNavigator(context, HomePage());
-                    showdialog(context, "Confirm",
-                         SizedBox(
-                          height: 200,
-                         child: Column(children: [
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            margin: EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.green,
-                              border: Border.all(color: Colors.green),
-                              borderRadius: BorderRadius.circular(50)
-                            ),
-                            child: Icon(Icons.done,size: 70,color: Colors.white,)),
-                          Text("Your Order was submitted successfully",style: TextStyle(color: Colors.green,fontSize: 20,fontWeight: FontWeight.bold),),
-                                             ],),
-                       ), Colors.white);
+                    // showdialog(context, "Confirm",
+                    //      SizedBox(
+                    //       height: 200,
+                    //      child: Column(children: [
+                    //       Container(
+                    //         padding: EdgeInsets.all(10),
+                    //         margin: EdgeInsets.only(bottom: 10),
+                    //         decoration: BoxDecoration(
+                    //           color: Colors.green,
+                    //           border: Border.all(color: Colors.green),
+                    //           borderRadius: BorderRadius.circular(50)
+                    //         ),
+                    //         child: Icon(Icons.done,size: 70,color: Colors.white,)),
+                    //       Text("Your Order was submitted successfully",style: TextStyle(color: Colors.green,fontSize: 20,fontWeight: FontWeight.bold),),
+                    //                          ],),
+                    //    ), Colors.white);
+                    
+                    myReplaceNavigator(context, HomePage());
+                    
                    // snackbar(context, "Your Order was submitted successfully");
                      postData(
                         'orders',
                         {
-                          'id': email.text + ordersNames.toString(),
-                          'name': name.text,
-                          'address': address.text,
-                          'mobile': mobile.text,
-                          'email': email.text,
+                          'id': Controllers.email.text + ordersNames.toString(),
+                          'name': Controllers.name.text,
+                          'address': Controllers.address.text,
+                          'mobile': Controllers.mobile.text,
+                          'email': Controllers.email.text,
                           'totalPrice': price.toString(),
                           'order': ordersNames.toString(),
                           'quantity': ordersQuantities.toString(),
                           'paymentStatus': "Paid",
                           'time': DateTime.now().toString()
                         },
-                        email.text + ordersNames.toString(),).then((value) {
-                        name.text = "";
-                        address.text = "";
-                        mobile.text = "";
-                        email.text = "";
+                        Controllers.email.text + ordersNames.toString(),).then((value) {
+                        Controllers.name.text = "";
+                        Controllers.address.text = "";
+                        Controllers.mobile.text = "";
+                        Controllers.email.text = "";
                         orders.clear();
                         ordersNames.clear();
                         ordersQuantities.clear();
@@ -484,6 +487,7 @@ class ShopCubit extends Cubit<ShopsStates> {
                         confirmtap = false;
                        // myPushNavigator(context, HomePage());
                         print("================== onSuccess: ${params['message']} ======================");
+
                         //snackbar(context, "Your Order was submitted successfully");
                       //  showdialog(context, "Confirm", Text("Your Order was submitted successfully",style: TextStyle(color: Colors.white),), Colors.green);
                         emit(ConfirmOrderState());
@@ -510,23 +514,23 @@ class ShopCubit extends Cubit<ShopsStates> {
       postData(
         'orders',
         {
-          'id': email.text + ordersNames.toString(),
-          'name': name.text,
-          'address': address.text,
-          'mobile': mobile.text,
-          'email': email.text,
+          'id': Controllers.email.text + ordersNames.toString(),
+          'name': Controllers.name.text,
+          'address': Controllers.address.text,
+          'mobile': Controllers.mobile.text,
+          'email': Controllers.email.text,
           'totalPrice': price.toString(),
           'order': ordersNames.toString(),
           'quantity': ordersQuantities.toString(),
           'paymentStatus': "UnPaid",
           'time': DateTime.now().toString()
         },
-        email.text + ordersNames.toString(),
+        Controllers.email.text + ordersNames.toString(),
       ).then((value) {
-        name.text = "";
-        address.text = "";
-        mobile.text = "";
-        email.text = "";
+        Controllers.name.text = "";
+        Controllers.address.text = "";
+        Controllers.mobile.text = "";
+        Controllers.email.text = "";
         orders.clear();
         ordersNames.clear();
         ordersQuantities.clear();
